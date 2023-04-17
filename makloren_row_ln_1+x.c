@@ -58,21 +58,30 @@
  * 5.                                       */
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
-static double Un, x, y, power;
+static double Un, x, y, power, z;
 static int n;
 
 int main()
 {
+	time_t beg, end;
 	printf("x = ");
 	scanf("%lf", &x);
+	beg = clock();
 	power = y = x;
 	x = -x;
 	n = 1;
-	while ((Un = (power *= x) / ++n) < -1e-6 || Un > 1e-6) {
+	while ((Un = (power *= x) / ++n) < -1e-15 || Un > 1e-15) {
 		y += Un;
 	}
-	printf("y = %.6f\n", y);
-	printf("z = %.6f\n", log(1 - x));
+	end = clock();
+	printf("y = %.63f\n", y);
+	printf("%fms\n", (double)(end - beg) / CLOCKS_PER_SEC * 1000);
+	beg = clock();
+	z = log(1+x);
+	end = clock();
+	printf("z = %.63f\n", log(1 - x));
+	printf("%fms\n", (double)(end - beg) / CLOCKS_PER_SEC * 1000);
 	return 0;
 }
